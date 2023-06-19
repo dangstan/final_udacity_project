@@ -1,4 +1,3 @@
-from flask import Flask, session, jsonify, request
 import pandas as pd
 import numpy as np
 import pickle
@@ -25,10 +24,16 @@ def score_model():
     #this function should take a trained model, load test data, and calculate an F1 score for the model relative to the test data
     #it should write the result to the latestscore.txt file
     test_data = pd.read_csv(test_data_path+'/testdata.csv')
-    with open(model_path+'/trainedmodel.pkl', 'rb') as file:
+    with open(model_path+'/trained_model.pkl', 'rb') as file:
         model = pickle.load(file)
 
-    predictions = model.predict(test_data.iloc[:,:-1])
+    predictions = model.predict(test_data.iloc[:,1:-1])
     score = f1_score(test_data.iloc[:,-1],predictions)
-    with open(model_path+'/latestscore.txt', 'wb') as file:
+    with open(model_path+'/latestscore.txt', 'w') as file:
         file.write(str(score))
+
+    return score
+
+
+if __name__ == '__main__':
+    score_model()

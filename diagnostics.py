@@ -18,11 +18,11 @@ model_path = os.path.join(config['prod_deployment_path'])
 ##################Function to get model predictions
 def model_predictions(data):
     #read the deployed model and a test dataset, calculate predictions
-    with open(model_path+'/trainedmodel.pkl', 'rb') as file:
+    with open(model_path+'/trained_model.pkl', 'rb') as file:
         model = pickle.load(file)
 
-    predictions = model.predict(data.iloc[:,:-1]).values.tolist()
-    return predictions#return value should be a list containing all predictions
+    predictions = model.predict(data.iloc[:,1:-1]).tolist()
+    return predictions #return value should be a list containing all predictions
 
 ##################Function to get summary statistics
 def dataframe_summary():
@@ -106,14 +106,14 @@ def outdated_packages_list():
         except Exception as e:
             packages[package]["Latest Version"] = "Unable to fetch"
 
-    # Creating a DataFrame from the dictionary
-    df = pd.DataFrame(packages).T
-    return df
+    return packages
 
 
 if __name__ == '__main__':
-    model_predictions()
+    data = pd.read_csv(test_data_path+'/testdata.csv')
+    model_predictions(data)
     dataframe_summary()
+    check_missing_data()
     execution_time()
     outdated_packages_list()
 

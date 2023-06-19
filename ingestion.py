@@ -14,19 +14,23 @@ with open('config.json','r') as f:
 input_folder_path = config['input_folder_path']
 output_folder_path = config['output_folder_path']
 
-
+if not os.path.exists(output_folder_path):
+    os.makedirs(output_folder_path)
 
 #############Function for data ingestion
 def merge_multiple_dataframe():
-    filenames = os.listdir(os.getcwd()+input_folder_path)
+    path = os.getcwd()+'/'+input_folder_path
+    filenames = os.listdir(path)
     df_ = pd.DataFrame()
     
     for each_filename in filenames:
-        dfl = pd.read_csv(os.getcwd()+directory+each_filename)
+        if '.csv' not in each_filename:
+            continue
+        dfl = pd.read_csv(path+'/'+each_filename)
         df_=pd.concat([df_,dfl], ignore_index=True).drop_duplicates() 
 
     df_.to_csv(output_folder_path+'/finaldata.csv', index=False) 
-    with open(output_folder_path+'ingestedfiles.txt', 'w') as f:
+    with open(output_folder_path+'/ingestedfiles.txt', 'w') as f:
         for file in filenames:
             f.write(f"{file}\n")
 

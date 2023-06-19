@@ -1,4 +1,4 @@
-from flask import Flask, session, jsonify, request
+from flask import Flask, request
 import pandas as pd
 import numpy as np
 import pickle
@@ -28,24 +28,24 @@ prediction_model = None
 def predict():        
     #call the prediction function you created in Step 3
     data = request.get_json(force=True)
-    return dg.model_predictions(data) #add return value for prediction outputs
+    return dg.model_predictions(pd.DataFrame.from_dict(data)) #add return value for prediction outputs
 
 #######################Scoring Endpoint
 @app.route("/scoring", methods=['GET','OPTIONS'])
-def stats():        
+def scoring():        
     #check the score of the deployed model
     score = sc.score_model()
-    return score #add return value (a single F1 score number)
+    return str(score) #add return value (a single F1 score number)
 
 #######################Summary Statistics Endpoint
 @app.route("/summarystats", methods=['GET','OPTIONS'])
-def stats():        
+def summary():        
     summary = dg.dataframe_summary() #check means, medians, and modes for each column
     return summary #return a list of all calculated summary statistics
 
 #######################Diagnostics Endpoint
 @app.route("/diagnostics", methods=['GET','OPTIONS'])
-def stats():        
+def diag():        
     results = {}
 
     results['missing_data'] = dg.check_missing_data()
