@@ -55,7 +55,7 @@ def pipeline():
 
     ##################Deciding whether to proceed, part 2
     #if you found model drift, you should proceed. otherwise, do end the process here
-    print(new_score,old_score)
+    
     if new_score > float(old_score):
         print(new_score,old_score)
         return

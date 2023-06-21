@@ -6,6 +6,7 @@ import os
 import json
 import subprocess
 import pickle
+import requests
 
 ##################Load config.json and get environment variables
 with open('config.json','r') as f:
